@@ -93,10 +93,8 @@ public class Game {
             lastDamaged.put(player, null);
             if (getPlayerTeam(player) == 1) {
                 player.teleport(spawnOne);
-                spawnOne.add(-1, 0, 0);
             } else if (getPlayerTeam(player) == 2) {
                 player.teleport(spawnTwo);
-                spawnTwo.add(0, 0, 1);
             }
             player.setGameMode(GameMode.SURVIVAL);
             player.getInventory().clear();
