@@ -207,7 +207,7 @@ public class Events implements Listener {
         // Check for dropping frog blessing while jump effect active
         if (droppedItem.hasItemMeta() && droppedItem.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Frog")) {
             Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
-                if (player.hasPotionEffect(PotionEffectType.JUMP) && Arrays.stream(player.getInventory().getContents()).anyMatch(item -> item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Frog"))) {
+                if (player.hasPotionEffect(PotionEffectType.JUMP) && !Arrays.stream(player.getInventory().getContents()).anyMatch(item -> item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Frog"))) {
                     player.removePotionEffect(PotionEffectType.JUMP);
                 }
             }, 5L);
