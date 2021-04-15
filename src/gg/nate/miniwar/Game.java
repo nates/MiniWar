@@ -207,7 +207,6 @@ public class Game {
         ArrayList<PotionEffect> effects = new ArrayList<>();
         effects.add(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
         effects.add(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 0, false, false));
-        effects.add(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 0, false, false));
 
         Random rand = new Random();
         PotionEffect effect = effects.get(rand.nextInt(effects.size()));
