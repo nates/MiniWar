@@ -209,6 +209,7 @@ public class Events implements Listener {
             Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
                 if (player.hasPotionEffect(PotionEffectType.JUMP) && !Arrays.stream(player.getInventory().getContents()).anyMatch(item -> item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Frog"))) {
                     player.removePotionEffect(PotionEffectType.JUMP);
+                    player.sendMessage(ChatColor.GREEN + "Frog" + ChatColor.GRAY + " has been toggled off!");
                 }
             }, 5L);
         }
