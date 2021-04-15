@@ -236,6 +236,12 @@ public class Game {
         pyromaniacLore.add(ChatColor.GRAY + "to fire & lava.");
         blessings.add(createBlessing(ChatColor.RED + "Pyromaniac", pyromaniacLore));
 
+        // Jelly Legs Blessing
+        List<String> jellyLegs = new ArrayList<>();
+        jellyLegs.add(ChatColor.GRAY + "This blessing will give you immunity");
+        jellyLegs.add(ChatColor.GRAY + "to fall damage.");
+        blessings.add(createBlessing(ChatColor.AQUA + "Jelly Legs", jellyLegs));
+
         // Frog Blessing
         List<String> frogLore = new ArrayList<>();
         frogLore.add(ChatColor.GRAY + "This blessing will give you a jump");
