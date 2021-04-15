@@ -103,6 +103,7 @@ public class Game {
             player.setInvulnerable(false);
             for(PotionEffect effect:player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
             giveStartingItems(player);
+
             if (Math.random() > 0.66) {
                 int random = (int) (Math.random() * 3) + 1;
                 switch (random) {

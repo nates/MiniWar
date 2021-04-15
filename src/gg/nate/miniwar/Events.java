@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -34,6 +35,7 @@ public class Events implements Listener {
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
             // Teleport to spawn and set spawn point
             player.getInventory().clear();
+            for (PotionEffect effect : player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
             player.setInvulnerable(true);
             player.teleport(Main.war.getWorld().getSpawnLocation());
             player.setBedSpawnLocation(Main.war.getWorld().getSpawnLocation());
@@ -135,6 +137,7 @@ public class Events implements Listener {
                     }
                     defender.getInventory().clear();
                     defender.setHealth(20.0);
+                    for (PotionEffect effect : defender.getActivePotionEffects()) defender.removePotionEffect(effect.getType());
                     defender.setGameMode(GameMode.SPECTATOR);
                     defender.getWorld().strikeLightningEffect(defender.getLocation());
                     Player lastAttacker = Main.war.getLastDamaged(defender);
@@ -183,12 +186,15 @@ public class Events implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
 
+        // Frog blessing
         if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Frog")) {
             if (player.hasPotionEffect(PotionEffectType.JUMP)) {
                 player.removePotionEffect(PotionEffectType.JUMP);
+                player.sendMessage(ChatColor.GREEN + "Frog" + ChatColor.GRAY + " has been toggled off!");
             } else {
                 PotionEffect jumpEffect = new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, false, false);
                 player.addPotionEffect(jumpEffect);
+                player.sendMessage(ChatColor.GREEN + "Frog" + ChatColor.GRAY + " has been toggled on!");
             }
         }
     }
