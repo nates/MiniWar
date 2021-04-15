@@ -235,6 +235,13 @@ public class Game {
         pyromaniacLore.add(ChatColor.GRAY + "to fire & lava.");
         blessings.add(createBlessing(ChatColor.RED + "Pyromaniac", pyromaniacLore));
 
+        // Frog Blessing
+        List<String> frogLore = new ArrayList<>();
+        frogLore.add(ChatColor.GRAY + "This blessing will give you a jump");
+        frogLore.add(ChatColor.GRAY + "boost.");
+        frogLore.add(ChatColor.GRAY + "Toggle by right clicking in your hand.");
+        blessings.add(createBlessing(ChatColor.GREEN + "Frog", frogLore));
+
         Random rand = new Random();
         ItemStack blessing = blessings.get(rand.nextInt(blessings.size()));
         player.getInventory().addItem(blessing);
