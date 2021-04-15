@@ -49,7 +49,7 @@ public class MiniwarCommand implements CommandExecutor {
 
                         // Check for arguments
                         if (args.length < 4) {
-                            sender.sendMessage(ChatColor.RED + "Usage: miniwar teams add <player> [1 | 2]");
+                            sender.sendMessage(ChatColor.RED + "Usage: miniwar teams add <player> [1 | 2 | 3 | 4]");
                             return false;
                         }
 
@@ -73,8 +73,8 @@ public class MiniwarCommand implements CommandExecutor {
                         }
 
                         // Check for team
-                        if (!args[3].equals("1") && !args[3].equals("2")) {
-                            sender.sendMessage(ChatColor.RED + "Usage: miniwars teams add <player> [1 | 2]");
+                        if (!args[3].equals("1") && !args[3].equals("2") && !args[3].equals("3") && !args[3].equals("4")) {
+                            sender.sendMessage(ChatColor.RED + "Usage: miniwars teams add <player> [1 | 2 | 3 | 4]");
                             return false;
                         }
 
@@ -115,6 +115,8 @@ public class MiniwarCommand implements CommandExecutor {
                     case "list":
                         sender.sendMessage(ChatColor.GRAY + "Team one: " + Main.war.getTeam("1").stream().map(Player::getDisplayName).collect(Collectors.joining(", ")));
                         sender.sendMessage(ChatColor.GRAY + "Team two: " + Main.war.getTeam("2").stream().map(Player::getDisplayName).collect(Collectors.joining(", ")));
+                        sender.sendMessage(ChatColor.GRAY + "Team three: " + Main.war.getTeam("3").stream().map(Player::getDisplayName).collect(Collectors.joining(", ")));
+                        sender.sendMessage(ChatColor.GRAY + "Team four: " + Main.war.getTeam("4").stream().map(Player::getDisplayName).collect(Collectors.joining(", ")));
                         break;
                 }
                 break;
@@ -123,8 +125,8 @@ public class MiniwarCommand implements CommandExecutor {
                     sender.sendMessage(ChatColor.RED + "No permission!");
                     return false;
                 }
-                if (Main.war.getTeam("1").size() == 0 || Main.war.getTeam("2").size() == 0) {
-                    sender.sendMessage(ChatColor.RED + "There must be at least 1 person on each team!");
+                if (!Main.war.enoughPlayers()) {
+                    sender.sendMessage(ChatColor.RED + "There must be at least 1 person on two teams!");
                     return false;
                 }
                 Bukkit.broadcastMessage(ChatColor.GREEN + "Starting war!");

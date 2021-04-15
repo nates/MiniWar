@@ -53,6 +53,8 @@ public class MiniwarTab implements TabCompleter {
                             case "add":
                                 completions.add("1");
                                 completions.add("2");
+                                completions.add("3");
+                                completions.add("4");
                         }
                         break;
                 }

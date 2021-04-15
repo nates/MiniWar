@@ -17,10 +17,13 @@ import java.util.stream.Collectors;
 public class Game {
     private String state;
     private World world;
-    private BukkitTask warningTask;
+    private BukkitTask firstWarningTask;
+    private BukkitTask secondWarningTask;
     private BukkitTask fightTask;
     private ArrayList<Player> teamOne;
     private ArrayList<Player> teamTwo;
+    private ArrayList<Player> teamThree;
+    private ArrayList<Player> teamFour;
     private HashMap<Player, Integer> lives;
     private HashMap<Player, Player> lastDamaged;
 
@@ -29,6 +32,8 @@ public class Game {
         Bukkit.getLogger().info("Waiting for players...");
         teamOne = new ArrayList<Player>();
         teamTwo = new ArrayList<Player>();
+        teamThree = new ArrayList<Player>();
+        teamFour = new ArrayList<Player>();
         lives = new HashMap<>();
         lastDamaged = new HashMap<>();
         for (World w : Bukkit.getWorlds()) if (w.getEnvironment().equals(World.Environment.NORMAL)) world = w;
@@ -41,6 +46,8 @@ public class Game {
         Bukkit.getLogger().info("Waiting for players...");
         teamOne = new ArrayList<Player>();
         teamTwo = new ArrayList<Player>();
+        teamThree = new ArrayList<Player>();
+        teamFour = new ArrayList<Player>();
         lives = new HashMap<>();
         lastDamaged = new HashMap<>();
         world = w;
@@ -87,14 +94,33 @@ public class Game {
         Location spawnTwo = new Location(world, -2475, spawnTwoY, -2475);
         spawnTwo.getChunk().load(true);
 
+        // Get spawn for third team and load chunk
+        int spawnThreeY = world.getHighestBlockYAt(2475, -2475) + 2;
+        Location spawnThree = new Location(world, 2475, spawnThreeY, -2475);
+        spawnThree.getChunk().load(true);
+
+        // Get spawn for fourth team and load chunk
+        int spawnFourY = world.getHighestBlockYAt(-2475, 2475) + 2;
+        Location spawnFour = new Location(world, -2475, spawnFourY, 2475);
+        spawnFour.getChunk().load(true);
+
         // Spawn all players
         for (Player player : getAllPlayers()) {
             lives.put(player, 2);
             lastDamaged.put(player, null);
-            if (getPlayerTeam(player) == 1) {
-                player.teleport(spawnOne);
-            } else if (getPlayerTeam(player) == 2) {
-                player.teleport(spawnTwo);
+            switch (getPlayerTeam(player)) {
+                case 1:
+                    player.teleport(spawnOne);
+                    break;
+                case 2:
+                    player.teleport(spawnTwo);
+                    break;
+                case 3:
+                    player.teleport(spawnThree);
+                    break;
+                case 4:
+                    player.teleport(spawnFour);
+                    break;
             }
             player.setGameMode(GameMode.SURVIVAL);
             player.getInventory().clear();
@@ -122,7 +148,14 @@ public class Game {
         }
         state = "GRACE";
         Bukkit.getLogger().info("Grace period started.");
-        warningTask = Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
+        firstWarningTask = Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
+            // Teleport all players
+            for (Player player : getAllPlayers()) {
+                player.sendTitle(ChatColor.RED + "Warning", ChatColor.RED + "The war will start in 5 minutes.", 10, 60, 20);
+                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 29);
+            }
+        }, 20L * 600);
+        secondWarningTask = Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
             // Teleport all players
             for (Player player : getAllPlayers()) {
                 player.sendTitle(ChatColor.RED + "Warning", ChatColor.RED + "The war will start in 1 minute.", 10, 60, 20);
@@ -131,22 +164,41 @@ public class Game {
         }, 20L * 840);
         fightTask = Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
             state = "FIGHT";
-            // Location for first team
-            Location locOne = new Location(world, 475, 256, 475);
-            while(locOne.getBlock().isEmpty()) locOne.add(0, -1, 0);
-            locOne.add(0, 1, 0);
+            // Get location for first team and load chunk
+            int locOneY = world.getHighestBlockYAt(475, 475) + 2;
+            Location locOne = new Location(world, 475, locOneY, 475);
+            locOne.getChunk().load(true);
 
-            // Location for second team
-            Location locTwo = new Location(world, -475, 256, -475);
-            while(locTwo.getBlock().isEmpty()) locTwo.add(0, -1, 0);
-            locTwo.add(0, 1, 0);
+            // Get location for second team and load chunk
+            int locTwoY = world.getHighestBlockYAt(-475, -475) + 2;
+            Location locTwo = new Location(world, -475, locTwoY, -475);
+            locTwo.getChunk().load(true);
+
+            // Get location for third team and load chunk
+            int locThreeY = world.getHighestBlockYAt(-475, -475) + 2;
+            Location locThree = new Location(world, -475, locThreeY, -475);
+            locThree.getChunk().load(true);
+
+            // Get location for fourth team and load chunk
+            int locFourY = world.getHighestBlockYAt(-475, -475) + 2;
+            Location locFour = new Location(world, -475, locFourY, -475);
+            locFour.getChunk().load(true);
 
             // Teleport all players
             for (Player player : getAllPlayers()) {
-                if (getPlayerTeam(player) == 1) {
-                    player.teleport(locOne);
-                } else if (getPlayerTeam(player) == 2) {
-                    player.teleport(locTwo);
+                switch (getPlayerTeam(player)) {
+                    case 1:
+                        player.teleport(locOne);
+                        break;
+                    case 2:
+                        player.teleport(locTwo);
+                        break;
+                    case 3:
+                        player.teleport(locThree);
+                        break;
+                    case 4:
+                        player.teleport(locFour);
+                        break;
                 }
                 player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 29);
                 player.sendTitle(ChatColor.RED + "War", ChatColor.RED + "The war has started.", 10, 60, 20);
@@ -180,7 +232,8 @@ public class Game {
             player.kickPlayer(ChatColor.GREEN + "Creating world, please join momentarily.");
         }
 
-        warningTask.cancel();
+        firstWarningTask.cancel();
+        secondWarningTask.cancel();
         fightTask.cancel();
 
         String worldName = System.currentTimeMillis() / 1000L + "";
@@ -294,6 +347,41 @@ public class Game {
 
     // Getters, Setters, Adders, Removers, etc.
 
+    public String getWinner() {
+        ArrayList<String> aliveTeams = new ArrayList<>();
+
+        for (Player player : Main.war.getTeam("1")) {
+            if (Main.war.getLives(player) != 0) {
+                aliveTeams.add("1");
+                break;
+            }
+        }
+
+        for (Player player : Main.war.getTeam("2")) {
+            if (Main.war.getLives(player) != 0) {
+                aliveTeams.add("2");
+                break;
+            }
+        }
+
+        for (Player player : Main.war.getTeam("3")) {
+            if (Main.war.getLives(player) != 0) {
+                aliveTeams.add("3");
+                break;
+            }
+        }
+
+        for (Player player : Main.war.getTeam("4")) {
+            if (Main.war.getLives(player) != 0) {
+                aliveTeams.add("4");
+                break;
+            }
+        }
+
+        if (aliveTeams.size() != 1) return null;
+        return aliveTeams.get(0);
+    }
+
     public String getState() {
         return state;
     }
@@ -313,12 +401,16 @@ public class Game {
     public ArrayList<Player> getTeam(String team) {
         if (team.equals("1")) return teamOne;
         if (team.equals("2")) return teamTwo;
+        if (team.equals("3")) return teamThree;
+        if (team.equals("4")) return teamFour;
         return null;
     }
 
     public int getPlayerTeam(Player player) {
         if (teamOne.contains(player)) return 1;
         if (teamTwo.contains(player)) return 2;
+        if (teamThree.contains(player)) return 3;
+        if (teamFour.contains(player)) return 4;
         return 0;
     }
 
@@ -327,6 +419,8 @@ public class Game {
 
         allPlayers.addAll(teamOne);
         allPlayers.addAll(teamTwo);
+        allPlayers.addAll(teamThree);
+        allPlayers.addAll(teamFour);
 
         return allPlayers;
     }
@@ -349,6 +443,8 @@ public class Game {
 
         if (team.equals("1")) teamOne.add(player);
         if (team.equals("2")) teamTwo.add(player);
+        if (team.equals("3")) teamThree.add(player);
+        if (team.equals("4")) teamFour.add(player);
     }
 
     public void removePlayer(Player player) {
@@ -356,6 +452,8 @@ public class Game {
 
         teamOne.remove(player);
         teamTwo.remove(player);
+        teamThree.remove(player);
+        teamFour.remove(player);
     }
 
     public void shuffleTeams() {
@@ -366,23 +464,47 @@ public class Game {
         // Loop through both teams and add them to the temp array
         temp.addAll(teamOne);
         temp.addAll(teamTwo);
+        temp.addAll(teamThree);
+        temp.addAll(teamFour);
 
         // Clear original teams
         teamOne = new ArrayList<Player>();
         teamTwo = new ArrayList<Player>();
+        teamThree = new ArrayList<Player>();
+        teamFour = new ArrayList<Player>();
 
         // Shuffle the temp array
         Collections.shuffle(temp);
 
         // Add players back to teams
-        boolean toggle = true;
+        int cycle = 1;
         for (Player player : temp) {
-            if (toggle) {
-                teamOne.add(player);
-            } else {
-                teamTwo.add(player);
+            switch (cycle) {
+                case 1:
+                    teamOne.add(player);
+                    break;
+                case 2:
+                    teamTwo.add(player);
+                    break;
+                case 3:
+                    teamThree.add(player);
+                    break;
+                case 4:
+                    teamFour.add(player);
+                    break;
             }
-            toggle = !toggle;
+            cycle++;
+            if (cycle == 5) cycle = 1;
         }
+    }
+
+    public boolean enoughPlayers() {
+        int teamsWithPlayers = 0;
+        if (teamOne.size() > 0) teamsWithPlayers++;
+        if (teamTwo.size() > 0) teamsWithPlayers++;
+        if (teamThree.size() > 0) teamsWithPlayers++;
+        if (teamFour.size() > 0) teamsWithPlayers++;
+
+        return teamsWithPlayers >= 2;
     }
 }

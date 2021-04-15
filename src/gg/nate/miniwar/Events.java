@@ -65,21 +65,9 @@ public class Events implements Listener {
             }
 
 
-            boolean alive = false;
-            for (Player player : Main.war.getTeam("1")) {
-                if (Main.war.getLives(player) != 0) alive = true;
-            }
-            if (!alive) {
-                Main.war.endGame("2");
-                return;
-            }
-
-            alive = false;
-            for (Player player : Main.war.getTeam("2")) {
-                if (Main.war.getLives(player) != 0) alive = true;
-            }
-            if (!alive) {
-                Main.war.endGame("1");
+            String winners = Main.war.getWinner();
+            if (winners != null) {
+                Main.war.endGame(winners);
             }
         }
         Main.war.removePlayer(quitter);
@@ -160,21 +148,9 @@ public class Events implements Listener {
                         }
                     }
 
-                    boolean alive = false;
-                    for (Player player : Main.war.getTeam("1")) {
-                        if (Main.war.getLives(player) != 0) alive = true;
-                    }
-                    if (!alive) {
-                        Main.war.endGame("2");
-                        return;
-                    }
-
-                    alive = false;
-                    for (Player player : Main.war.getTeam("2")) {
-                        if (Main.war.getLives(player) != 0) alive = true;
-                    }
-                    if (!alive) {
-                        Main.war.endGame("1");
+                    String winners = Main.war.getWinner();
+                    if (winners != null) {
+                        Main.war.endGame(winners);
                     }
 
                 } else if (Main.war.getState().equals("GRACE")) {
