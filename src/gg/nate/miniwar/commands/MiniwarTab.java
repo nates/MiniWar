@@ -28,6 +28,7 @@ public class MiniwarTab implements TabCompleter {
                             completions.add("add");
                             completions.add("remove");
                             completions.add("shuffle");
+                            completions.add("list");
                         }
                         break;
                 }
