@@ -96,7 +96,7 @@ public class MiniwarCommand implements CommandExecutor {
                             return false;
                         }
 
-                        // Check if valid player
+                        // Check if player is valid
                         player = Bukkit.getServer().getPlayer(args[2].toLowerCase());
                         if (player == null) {
                             sender.sendMessage(ChatColor.RED + "Invalid player!");
