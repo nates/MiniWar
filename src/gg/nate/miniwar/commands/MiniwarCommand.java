@@ -125,10 +125,10 @@ public class MiniwarCommand implements CommandExecutor {
                     sender.sendMessage(ChatColor.RED + "No permission!");
                     return false;
                 }
-                if (!Main.war.enoughPlayers()) {
+                /*if (!Main.war.enoughPlayers()) {
                     sender.sendMessage(ChatColor.RED + "There must be at least 1 person on two teams!");
                     return false;
-                }
+                }*/
                 Bukkit.broadcastMessage(ChatColor.GREEN + "Starting war!");
                 Main.war.start();
                 break;

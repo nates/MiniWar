@@ -2,14 +2,13 @@ package gg.nate.miniwar;
 
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitTask;
+import gg.nate.miniwar.Blessings;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -130,6 +129,16 @@ public class Game {
             for(PotionEffect effect:player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
             giveStartingItems(player);
 
+            giveBlessing(player);
+            giveBlessing(player);
+            giveBlessing(player);
+            giveBlessing(player);
+            giveBlessing(player);
+            giveBlessing(player);
+            giveBlessing(player);
+            giveBlessing(player);
+            giveBlessing(player);
+            giveBlessing(player);
             if (Math.random() > 0.66) {
                 int random = (int) (Math.random() * 3) + 1;
                 switch (random) {
@@ -264,57 +273,13 @@ public class Game {
         Random rand = new Random();
         PotionEffect effect = effects.get(rand.nextInt(effects.size()));
         player.addPotionEffect(effect);
-        player.sendMessage(ChatColor.GRAY + "You were lucky and received a permanent " + ChatColor.RED + effect.getType().getName().toLowerCase() + ChatColor.GRAY + " effect!");
+        player.sendMessage(ChatColor.GRAY + "You have received a permanent " + ChatColor.RED + effect.getType().getName().toLowerCase() + ChatColor.GRAY + " effect!");
     }
 
     public void giveBlessing(Player player) {
-        ArrayList<ItemStack> blessings = new ArrayList<>();
-
-        // Chams Blessing
-        List<String> chamsLore = new ArrayList<>();
-        chamsLore.add(ChatColor.GRAY + "This blessing will outline enemies");
-        chamsLore.add(ChatColor.GRAY + "within a short radius.");
-        blessings.add(createBlessing(ChatColor.YELLOW + "Chams", chamsLore));
-
-        // Doctor Blessing
-        List<String> doctorLore = new ArrayList<>();
-        doctorLore.add(ChatColor.GRAY + "This blessing will heal nearby teammates");
-        doctorLore.add(ChatColor.GRAY + "within a short radius while sneaking.");
-        blessings.add(createBlessing(ChatColor.BLUE + "Doctor", doctorLore));
-
-        // Pyromaniac Blessing
-        List<String> pyromaniacLore = new ArrayList<>();
-        pyromaniacLore.add(ChatColor.GRAY + "This blessing will give you immunity");
-        pyromaniacLore.add(ChatColor.GRAY + "to fire & lava.");
-        blessings.add(createBlessing(ChatColor.RED + "Pyromaniac", pyromaniacLore));
-
-        // Jelly Legs Blessing
-        List<String> jellyLegs = new ArrayList<>();
-        jellyLegs.add(ChatColor.GRAY + "This blessing will give you immunity");
-        jellyLegs.add(ChatColor.GRAY + "to fall damage.");
-        blessings.add(createBlessing(ChatColor.AQUA + "Jelly Legs", jellyLegs));
-
-        // Frog Blessing
-        List<String> frogLore = new ArrayList<>();
-        frogLore.add(ChatColor.GRAY + "This blessing will give you a jump");
-        frogLore.add(ChatColor.GRAY + "boost.");
-        frogLore.add(ChatColor.GRAY + "Toggle by right clicking in your hand.");
-        blessings.add(createBlessing(ChatColor.GREEN + "Frog", frogLore));
-
-        Random rand = new Random();
-        ItemStack blessing = blessings.get(rand.nextInt(blessings.size()));
-        player.getInventory().addItem(blessing);
-        player.sendMessage(ChatColor.GRAY + "You were lucky and received " + ChatColor.RED + blessing.getItemMeta().getDisplayName() + ChatColor.GRAY + "!");
-    }
-
-    public ItemStack createBlessing(String name, List<String> lore) {
-        ItemStack blessing = new ItemStack(Material.ENCHANTED_BOOK, 1);
-        ItemMeta meta = blessing.getItemMeta();
-        meta.setDisplayName(name);
-        meta.setLore(lore);
-        blessing.setItemMeta(meta);
-
-        return blessing;
+        Blessings.Blessing blessing = Blessings.getRandomBlessing();
+        player.getInventory().addItem(blessing.item);
+        player.sendMessage(ChatColor.GRAY + "You have received a " + blessing.color + blessing.name + ChatColor.GRAY + " blessing!");
     }
 
     public void giveSpecialItem(Player player) {

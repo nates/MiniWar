@@ -7,19 +7,15 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class Events implements Listener {
@@ -82,14 +78,15 @@ public class Events implements Listener {
 
         // Disable friendly fire and PVP during Grace period
         if (attacker instanceof Player && defender instanceof Player) {
+            // No friendly fire
             if (Main.war.getPlayerTeam(((Player) attacker)) == Main.war.getPlayerTeam(((Player) defender))) {
                 event.setCancelled(true);
             } else {
+                // No damage on grace period
                 if (Main.war.getState().equals("GRACE")) {
                     event.setCancelled(true);
                     return;
                 }
-
                 // Set last damaged for death message
                 Main.war.setLastDamaged((Player) defender, (Player) attacker);
             }
@@ -108,26 +105,9 @@ public class Events implements Listener {
             // Check if player is on a team
             if (Main.war.getPlayerTeam(defender) == 0) return;
 
-            // Pyromaniac blessing
-            if (Arrays.stream(defender.getInventory().getContents()).anyMatch(item -> item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.RED + "Pyromaniac"))) {
-                ArrayList<EntityDamageEvent.DamageCause> fireCauses = new ArrayList<>();
-                fireCauses.add(EntityDamageEvent.DamageCause.FIRE);
-                fireCauses.add(EntityDamageEvent.DamageCause.FIRE_TICK);
-                fireCauses.add(EntityDamageEvent.DamageCause.LAVA);
-                if (fireCauses.contains(event.getCause())) event.setCancelled(true);
-            }
-                if (Arrays.stream(defender.getInventory().getContents()).anyMatch(item -> item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.AQUA + "Jelly Legs"))) {
-                    if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
-                        event.setCancelled(true);
-                        defender.sendMessage(ChatColor.GRAY + "Damage neglected by " + ChatColor.AQUA + "Jelly Legs");
-                    }
-                }
-
-
-            if (event.getFinalDamage() >= defender.getHealth() && !event.isCancelled()) {
+            if (!event.isCancelled() && event.getFinalDamage() >= defender.getHealth()) {
+                event.setCancelled(true);
                 if (Main.war.getState().equals("FIGHT") || Main.war.getLives(defender) == 1) {
-
-                    event.setCancelled(true);
                     Main.war.setLives(defender, 0);
                     for (ItemStack stack : defender.getInventory().getContents()) {
                         if (stack != null) defender.getWorld().dropItem(defender.getLocation(), stack);
@@ -147,15 +127,12 @@ public class Events implements Listener {
                             player.sendMessage(ChatColor.RED + defender.getDisplayName() + ChatColor.GRAY + " has been slain by " + ChatColor.RED + lastAttacker.getDisplayName() + ".");
                         }
                     }
-
                     String winners = Main.war.getWinner();
                     if (winners != null) {
                         Main.war.endGame(winners);
                     }
-
                 } else if (Main.war.getState().equals("GRACE")) {
                     Main.war.removeLive(defender);
-                    event.setCancelled(true);
                     defender.setHealth(1.0);
                     defender.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 80, 3));
                     defender.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 200, 2));
