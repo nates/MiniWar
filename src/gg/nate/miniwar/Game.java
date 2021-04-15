@@ -77,15 +77,15 @@ public class Game {
         world.getWorldBorder().setCenter(0.0, 0.0);
         world.getWorldBorder().setSize(5000);
 
-        // Spawnpoint for first team
-        Location spawnOne = new Location(world, 2475, 256, 2475);
-        while(spawnOne.getBlock().isEmpty()) spawnOne.add(0, -1, 0);
-        spawnOne.add(0, 1, 0);
+        // Get spawn for first team and load chunk
+        int spawnOneY = world.getHighestBlockYAt(-2475, -2475) + 2;
+        Location spawnOne = new Location(world, -2475, spawnOneY, -2475);
+        spawnOne.getChunk().load(true);
 
-        // Spawnpoint for second team
-        Location spawnTwo = new Location(world, -2475, 256, -2475);
-        while(spawnTwo.getBlock().isEmpty()) spawnTwo.add(0, -1, 0);
-        spawnTwo.add(0, 1, 0);
+        // Get spawn for second team and load chunk
+        int spawnTwoY = world.getHighestBlockYAt(-2475, -2475) + 2;
+        Location spawnTwo = new Location(world, -2475, spawnTwoY, -2475);
+        spawnTwo.getChunk().load(true);
 
         // Spawn all players
         for (Player player : getAllPlayers()) {
