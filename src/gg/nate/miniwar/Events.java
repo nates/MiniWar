@@ -126,6 +126,13 @@ public class Events implements Listener {
                 fireCauses.add(EntityDamageEvent.DamageCause.LAVA);
                 if (fireCauses.contains(event.getCause())) event.setCancelled(true);
             }
+                if (Arrays.stream(defender.getInventory().getContents()).anyMatch(item -> item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.AQUA + "Jelly Legs"))) {
+                    if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
+                        event.setCancelled(true);
+                        defender.sendMessage(ChatColor.GRAY + "Damage neglected by " + ChatColor.AQUA + "Jelly Legs");
+                    }
+                }
+
 
             if (event.getFinalDamage() >= defender.getHealth() && !event.isCancelled()) {
                 if (Main.war.getState().equals("FIGHT") || Main.war.getLives(defender) == 1) {
