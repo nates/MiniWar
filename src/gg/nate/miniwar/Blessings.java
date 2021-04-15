@@ -36,7 +36,7 @@ public class Blessings implements Listener {
         Blessing(String name, String lore, ChatColor color) {
             this.name = name;
             this.color = color;
-            this.item = createBlessing(color + name, lore);
+            this.item = createItem(color + name, lore);
         }
 
         public String getName() {
@@ -55,14 +55,14 @@ public class Blessings implements Listener {
             return item;
         }
 
-        private static ItemStack createBlessing(String name, String lore) {
-            ItemStack blessing = new ItemStack(Material.ENCHANTED_BOOK, 1);
-            ItemMeta meta = blessing.getItemMeta();
+        private static ItemStack createItem(String name, String lore) {
+            ItemStack item = new ItemStack(Material.ENCHANTED_BOOK, 1);
+            ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(name);
             meta.setLore(Arrays.asList(lore.split("\\+", -1)));
-            blessing.setItemMeta(meta);
+            item.setItemMeta(meta);
 
-            return blessing;
+            return item;
         }
     }
 
