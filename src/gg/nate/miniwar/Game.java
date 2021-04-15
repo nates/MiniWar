@@ -233,7 +233,7 @@ public class Game {
         // Doctor Blessing
         List<String> doctorLore = new ArrayList<>();
         doctorLore.add(ChatColor.GRAY + "This blessing will heal nearby teammates");
-        doctorLore.add(ChatColor.GRAY + "within a short radius while crouching.");
+        doctorLore.add(ChatColor.GRAY + "within a short radius while sneaking.");
         blessings.add(createBlessing(ChatColor.BLUE + "Doctor", doctorLore));
 
         // Pyromaniac Blessing
