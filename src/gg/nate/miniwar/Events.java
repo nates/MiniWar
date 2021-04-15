@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -81,7 +82,7 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (Main.war.getState().equals("WAITING")) return;
 
         Entity attacker = event.getDamager();
@@ -97,21 +98,14 @@ public class Events implements Listener {
                     return;
                 }
 
-                // Glow book
-                boolean hasGlowBook = Arrays.stream(((Player) attacker).getInventory().getContents()).anyMatch(item -> item.getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Book of Glowing"));
-                if (hasGlowBook) {
-                    ((Player) defender).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 300, 0, false, false));
-                }
-
                 // Set last damaged for death message
                 Main.war.setLastDamaged((Player) defender, (Player) attacker);
             }
         }
     }
 
-
     @EventHandler
-    public void OnEntityDamageEvent(EntityDamageEvent event) {
+    public void OnEntityDamage(EntityDamageEvent event) {
         if (Main.war.getState().equals("WAITING")) return;
 
         Entity entity = event.getEntity();
@@ -121,7 +115,17 @@ public class Events implements Listener {
 
             // Check if player is on a team
             if (Main.war.getPlayerTeam(defender) == 0) return;
-            if (event.getFinalDamage() >= defender.getHealth()) {
+
+            // Pyromaniac blessing
+            if (Arrays.stream(defender.getInventory().getContents()).anyMatch(item -> item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.RED + "Pyromaniac"))) {
+                ArrayList<EntityDamageEvent.DamageCause> fireCauses = new ArrayList<>();
+                fireCauses.add(EntityDamageEvent.DamageCause.FIRE);
+                fireCauses.add(EntityDamageEvent.DamageCause.FIRE_TICK);
+                fireCauses.add(EntityDamageEvent.DamageCause.LAVA);
+                if (fireCauses.contains(event.getCause())) event.setCancelled(true);
+            }
+
+            if (event.getFinalDamage() >= defender.getHealth() && !event.isCancelled()) {
                 if (Main.war.getState().equals("FIGHT") || Main.war.getLives(defender) == 1) {
 
                     event.setCancelled(true);
@@ -171,14 +175,20 @@ public class Events implements Listener {
                     defender.playSound(defender.getLocation(), Sound.ITEM_TOTEM_USE, 10, 29);
                 }
             }
+        }
+    }
 
-            // Pyromaniac blessing
-            if (Arrays.stream(defender.getInventory().getContents()).anyMatch(item -> item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.RED + "Pyromaniac"))) {
-                ArrayList<EntityDamageEvent.DamageCause> fireCauses = new ArrayList<>();
-                fireCauses.add(EntityDamageEvent.DamageCause.FIRE);
-                fireCauses.add(EntityDamageEvent.DamageCause.FIRE_TICK);
-                fireCauses.add(EntityDamageEvent.DamageCause.LAVA);
-                if (fireCauses.contains(event.getCause())) event.setCancelled(true);
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = event.getItem();
+
+        if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Frog")) {
+            if (player.hasPotionEffect(PotionEffectType.JUMP)) {
+                player.removePotionEffect(PotionEffectType.JUMP);
+            } else {
+                PotionEffect jumpEffect = new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, false, false);
+                player.addPotionEffect(jumpEffect);
             }
         }
     }

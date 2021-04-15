@@ -231,8 +231,8 @@ public class Game {
 
         // Pyromaniac Blessing
         List<String> pyromaniacLore = new ArrayList<>();
-        pyromaniacLore.add(ChatColor.GRAY + "This blessing will give you");
-        pyromaniacLore.add(ChatColor.GRAY + "immunity to fire & lava.");
+        pyromaniacLore.add(ChatColor.GRAY + "This blessing will give you immunity");
+        pyromaniacLore.add(ChatColor.GRAY + "to fire & lava.");
         blessings.add(createBlessing(ChatColor.RED + "Pyromaniac", pyromaniacLore));
 
         Random rand = new Random();
