@@ -123,10 +123,10 @@ public class MiniwarCommand implements CommandExecutor {
                     sender.sendMessage(ChatColor.RED + "No permission!");
                     return false;
                 }
-                if (Main.war.getTeam("1").size() == 0 || Main.war.getTeam("2").size() == 0) {
-                    sender.sendMessage(ChatColor.RED + "There must be at least 1 person on each team!");
-                    return false;
-                }
+//                if (Main.war.getTeam("1").size() == 0 || Main.war.getTeam("2").size() == 0) {
+//                    sender.sendMessage(ChatColor.RED + "There must be at least 1 person on each team!");
+//                    return false;
+//                }
                 Bukkit.broadcastMessage(ChatColor.GREEN + "Starting war!");
                 Main.war.start();
                 break;
