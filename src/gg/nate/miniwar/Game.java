@@ -78,8 +78,8 @@ public class Game {
         world.getWorldBorder().setSize(5000);
 
         // Get spawn for first team and load chunk
-        int spawnOneY = world.getHighestBlockYAt(-2475, -2475) + 2;
-        Location spawnOne = new Location(world, -2475, spawnOneY, -2475);
+        int spawnOneY = world.getHighestBlockYAt(2475, 2475) + 2;
+        Location spawnOne = new Location(world, 2475, spawnOneY, 2475);
         spawnOne.getChunk().load(true);
 
         // Get spawn for second team and load chunk
