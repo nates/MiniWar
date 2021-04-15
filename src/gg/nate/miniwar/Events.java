@@ -30,6 +30,7 @@ public class Events implements Listener {
         for (PotionEffect effect : player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
         if (Main.war.getState().equals("WAITING")) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 2));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION,Integer.MAX_VALUE, 2));
             player.setGameMode(GameMode.ADVENTURE);
         } else {
             player.setGameMode(GameMode.SPECTATOR);
