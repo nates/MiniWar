@@ -256,6 +256,7 @@ public class Game {
         // Regular items
         items.add(new ItemStack(Material.ENDER_PEARL));
         items.add(new ItemStack(Material.GOLDEN_APPLE));
+        items.add(new ItemStack(Material.LEATHER_CHESTPLATE));
 
         // Enchanted items
         ItemStack efficiencyPick = new ItemStack(Material.STONE_PICKAXE);
