@@ -166,6 +166,7 @@ public class Blessings implements Listener {
                 if (player.hasPotionEffect(PotionEffectType.JUMP) && !hasBlessing(player, Blessing.FROG)) {
                     player.removePotionEffect(PotionEffectType.JUMP);
                     player.sendMessage(Blessing.FROG.getDisplayName() + ChatColor.GRAY + " has been toggled off!");
+                    player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, 8, 25);
                 }
             }, 5L);
         }
@@ -185,10 +186,12 @@ public class Blessings implements Listener {
             if (player.hasPotionEffect(PotionEffectType.JUMP)) {
                 player.removePotionEffect(PotionEffectType.JUMP);
                 player.sendMessage(Blessing.FROG.getDisplayName() + ChatColor.GRAY + " has been toggled off!");
+                player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, 8, 25);
             } else {
                 PotionEffect jumpEffect = new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, false, false);
                 player.addPotionEffect(jumpEffect);
                 player.sendMessage(Blessing.FROG.getDisplayName() + ChatColor.GRAY + " has been toggled on!");
+                player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON, 8, 25);
             }
         }
     }
