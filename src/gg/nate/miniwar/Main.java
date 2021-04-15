@@ -31,7 +31,7 @@ public class Main extends JavaPlugin {
                 if (war.getState().equals("GRACE") || war.getState().equals("FIGHT")) {
                     for (Player player : war.getAllPlayers()) {
                         if (player.getGameMode() != GameMode.SURVIVAL) continue;
-                        // Pyromaniac Blessing
+                        // Chams Blessing
                         if (Arrays.stream(player.getInventory().getContents()).anyMatch(item -> item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Chams"))) {
                             Collection<Entity> nearbyEntities = war.getWorld().getNearbyEntities(player.getLocation(), 15, 15, 15);
                             for (Entity entity : nearbyEntities) {
