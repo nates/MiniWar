@@ -262,15 +262,20 @@ public class Game {
         ArrayList<ItemStack> items = new ArrayList<>();
         // Regular items
         items.add(new ItemStack(Material.ENDER_PEARL));
+        items.add(new ItemStack(Material.GOLDEN_APPLE));
 
         // Enchanted items
-        ItemStack efficiencyPick = new ItemStack(Material.IRON_PICKAXE);
+        ItemStack efficiencyPick = new ItemStack(Material.STONE_PICKAXE);
         efficiencyPick.addEnchantment(Enchantment.DIG_SPEED, 1);
         items.add(efficiencyPick);
 
-        ItemStack frostBoots = new ItemStack(Material.LEATHER_BOOTS);
-        frostBoots.addEnchantment(Enchantment.DEPTH_STRIDER, 3);
-        items.add(frostBoots);
+        ItemStack protBoots = new ItemStack(Material.CHAINMAIL_BOOTS);
+        protBoots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        items.add(protBoots);
+
+        ItemStack unbreakingHelm = new ItemStack(Material.IRON_HELMET);
+        unbreakingHelm.addEnchantment(Enchantment.DURABILITY, 1);
+        items.add(unbreakingHelm);
 
         Random rand = new Random();
         player.getInventory().addItem(items.get(rand.nextInt(items.size())));
