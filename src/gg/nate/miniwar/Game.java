@@ -175,13 +175,13 @@ public class Game {
             locTwo.getChunk().load(true);
 
             // Get location for third team and load chunk
-            int locThreeY = world.getHighestBlockYAt(-475, -475) + 2;
-            Location locThree = new Location(world, -475, locThreeY, -475);
+            int locThreeY = world.getHighestBlockYAt(475, -475) + 2;
+            Location locThree = new Location(world, 475, locThreeY, -475);
             locThree.getChunk().load(true);
 
             // Get location for fourth team and load chunk
-            int locFourY = world.getHighestBlockYAt(-475, -475) + 2;
-            Location locFour = new Location(world, -475, locFourY, -475);
+            int locFourY = world.getHighestBlockYAt(-475, 475) + 2;
+            Location locFour = new Location(world, -475, locFourY, 475);
             locFour.getChunk().load(true);
 
             // Teleport all players
