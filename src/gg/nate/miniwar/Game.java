@@ -269,13 +269,17 @@ public class Game {
         efficiencyPick.addEnchantment(Enchantment.DIG_SPEED, 1);
         items.add(efficiencyPick);
 
-        ItemStack protBoots = new ItemStack(Material.CHAINMAIL_BOOTS);
-        protBoots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-        items.add(protBoots);
+        ItemStack unbreakingBoots = new ItemStack(Material.IRON_BOOTS);
+        unbreakingBoots.addEnchantment(Enchantment.DURABILITY, 1);
+        items.add(unbreakingBoots);
 
-        ItemStack unbreakingHelm = new ItemStack(Material.IRON_HELMET);
-        unbreakingHelm.addEnchantment(Enchantment.DURABILITY, 1);
-        items.add(unbreakingHelm);
+        ItemStack protHelm = new ItemStack(Material.CHAINMAIL_HELMET);
+        protHelm.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        items.add(protHelm);
+
+        ItemStack unbreakingLeggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+        unbreakingLeggings.addEnchantment(Enchantment.DURABILITY, 1);
+        items.add(unbreakingLeggings);
 
         Random rand = new Random();
         player.getInventory().addItem(items.get(rand.nextInt(items.size())));
