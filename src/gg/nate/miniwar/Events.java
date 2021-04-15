@@ -1,0 +1,185 @@
+package gg.nate.miniwar;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+
+public class Events implements Listener {
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if (Main.war.getState().equals("WAITING")) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 2));
+            player.setGameMode(GameMode.ADVENTURE);
+        } else {
+            player.setGameMode(GameMode.SPECTATOR);
+        }
+        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
+            // Teleport to spawn and set spawn point
+            player.getInventory().clear();
+            player.setInvulnerable(true);
+            player.teleport(Main.war.getWorld().getSpawnLocation());
+            player.setBedSpawnLocation(Main.war.getWorld().getSpawnLocation());
+        }, 5L);
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player quitter = event.getPlayer();
+        if (Main.war.getPlayerTeam(quitter) == 0) return;
+        if (Main.war.getState().equals("GRACE") || Main.war.getState().equals("FIGHT")) {
+            Main.war.setLives(quitter, 0);
+            for (ItemStack stack : quitter.getInventory().getContents()) {
+                if (stack != null) quitter.getWorld().dropItem(quitter.getLocation(), stack);
+            }
+            quitter.setHealth(20.0);
+            quitter.getWorld().strikeLightningEffect(quitter.getLocation());
+            Player lastAttacker = Main.war.getLastDamaged(quitter);
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.playSound(player.getLocation(), Sound.ENTITY_WITHER_HURT, 10, 29);
+                player.sendTitle(ChatColor.GRAY + "[" + ChatColor.YELLOW + "⚔" + ChatColor.GRAY + "] " + ChatColor.RED + quitter.getDisplayName(), "", 10, 60, 20);
+                if (lastAttacker != null) {
+                    player.sendMessage(ChatColor.RED + quitter.getDisplayName() + ChatColor.GRAY + " has been slain by " + ChatColor.RED + lastAttacker.getDisplayName() + ".");
+                }
+            }
+
+
+            boolean alive = false;
+            for (Player player : Main.war.getTeam("1")) {
+                if (Main.war.getLives(player) != 0) alive = true;
+            }
+            if (!alive) {
+                Main.war.endGame("2");
+                return;
+            }
+
+            alive = false;
+            for (Player player : Main.war.getTeam("2")) {
+                if (Main.war.getLives(player) != 0) alive = true;
+            }
+            if (!alive) {
+                Main.war.endGame("1");
+            }
+        }
+        Main.war.removePlayer(quitter);
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+        if (Main.war.getState().equals("WAITING")) return;
+
+        Entity attacker = event.getDamager();
+        Entity defender = event.getEntity();
+
+        // Disable friendly fire and PVP during Grace period
+        if (attacker instanceof Player && defender instanceof Player) {
+            if (Main.war.getPlayerTeam(((Player) attacker)) == Main.war.getPlayerTeam(((Player) defender))) {
+                event.setCancelled(true);
+            } else {
+                if (Main.war.getState().equals("GRACE")) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                // Glow book
+                boolean hasGlowBook = Arrays.stream(((Player) attacker).getInventory().getContents()).anyMatch(item -> item.getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Book of Glowing"));
+                if (hasGlowBook) {
+                    ((Player) defender).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 300, 0, false, false));
+                }
+
+                // Set last damaged for death message
+                Main.war.setLastDamaged((Player) defender, (Player) attacker);
+            }
+        }
+    }
+
+
+    @EventHandler
+    public void OnEntityDamageEvent(EntityDamageEvent event) {
+        if (Main.war.getState().equals("WAITING")) return;
+
+        Entity entity = event.getEntity();
+        // Respawn to spectator and strike lightning
+        if (entity instanceof Player) {
+            Player defender = (Player) entity;
+
+            // Check if player is on a team
+            if (Main.war.getPlayerTeam(defender) == 0) return;
+            if (event.getFinalDamage() >= defender.getHealth()) {
+                if (Main.war.getState().equals("FIGHT") || Main.war.getLives(defender) == 1) {
+
+                    event.setCancelled(true);
+                    Main.war.setLives(defender, 0);
+                    for (ItemStack stack : defender.getInventory().getContents()) {
+                        if (stack != null) defender.getWorld().dropItem(defender.getLocation(), stack);
+                    }
+                    defender.getInventory().clear();
+                    defender.setHealth(20.0);
+                    defender.setGameMode(GameMode.SPECTATOR);
+                    defender.getWorld().strikeLightningEffect(defender.getLocation());
+                    Player lastAttacker = Main.war.getLastDamaged(defender);
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.playSound(player.getLocation(), Sound.ENTITY_WITHER_HURT, 10, 29);
+                        player.sendTitle(ChatColor.GRAY + "[" + ChatColor.YELLOW + "⚔" + ChatColor.GRAY + "] " + ChatColor.RED + defender.getDisplayName(), "", 10, 60, 20);
+                        if (lastAttacker == null) {
+                            player.sendMessage(ChatColor.RED + defender.getDisplayName() + ChatColor.GRAY + " has died due to natural causes.");
+                        } else {
+                            player.sendMessage(ChatColor.RED + defender.getDisplayName() + ChatColor.GRAY + " has been slain by " + ChatColor.RED + lastAttacker.getDisplayName() + ".");
+                        }
+                    }
+
+                    boolean alive = false;
+                    for (Player player : Main.war.getTeam("1")) {
+                        if (Main.war.getLives(player) != 0) alive = true;
+                    }
+                    if (!alive) {
+                        Main.war.endGame("2");
+                        return;
+                    }
+
+                    alive = false;
+                    for (Player player : Main.war.getTeam("2")) {
+                        if (Main.war.getLives(player) != 0) alive = true;
+                    }
+                    if (!alive) {
+                        Main.war.endGame("1");
+                    }
+
+                } else if (Main.war.getState().equals("GRACE")) {
+                    Main.war.removeLive(defender);
+                    event.setCancelled(true);
+                    defender.setHealth(1.0);
+                    defender.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 80, 3));
+                    defender.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 200, 2));
+                    defender.sendTitle(ChatColor.GREEN + "Second Chance", ChatColor.GREEN + "You have been given a second chance!", 10, 60, 20);
+                    defender.playSound(defender.getLocation(), Sound.ITEM_TOTEM_USE, 10, 29);
+                }
+            }
+
+            // Pyromaniac blessing
+            if (Arrays.stream(defender.getInventory().getContents()).anyMatch(item -> item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(ChatColor.RED + "Pyromaniac"))) {
+                ArrayList<EntityDamageEvent.DamageCause> fireCauses = new ArrayList<>();
+                fireCauses.add(EntityDamageEvent.DamageCause.FIRE);
+                fireCauses.add(EntityDamageEvent.DamageCause.FIRE_TICK);
+                fireCauses.add(EntityDamageEvent.DamageCause.LAVA);
+                if (fireCauses.contains(event.getCause())) event.setCancelled(true);
+            }
+        }
+    }
+}
