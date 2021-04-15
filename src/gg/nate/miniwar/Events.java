@@ -26,6 +26,8 @@ public class Events implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+
+        for (PotionEffect effect : player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
         if (Main.war.getState().equals("WAITING")) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 2));
             player.setGameMode(GameMode.ADVENTURE);
@@ -35,7 +37,6 @@ public class Events implements Listener {
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
             // Teleport to spawn and set spawn point
             player.getInventory().clear();
-            for (PotionEffect effect : player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
             player.setInvulnerable(true);
             player.teleport(Main.war.getWorld().getSpawnLocation());
             player.setBedSpawnLocation(Main.war.getWorld().getSpawnLocation());
