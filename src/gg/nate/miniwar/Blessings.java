@@ -34,7 +34,7 @@ public class Blessings implements Listener {
         ),
         DOCTOR(
                 "Doctor",
-                ChatColor.BLUE + "This blessing will heal nearby teammates+" + ChatColor.GRAY + "within a short radius while sneaking.",
+                "This blessing will heal nearby teammates+" + ChatColor.GRAY + "within a short radius while sneaking.",
                 ChatColor.YELLOW,
                 new String[]{"   ", " 11", " 10"},
                 Material.GOLDEN_APPLE,
