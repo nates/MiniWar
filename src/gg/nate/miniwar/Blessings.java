@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -23,20 +24,27 @@ import java.util.Random;
 
 public class Blessings implements Listener {
     public enum Blessing {
-        PYROMANIAC("Pyromaniac", ChatColor.GRAY + "This blessing will give you+" + ChatColor.GRAY + "immunity to fire & lava.", ChatColor.RED),
-        DOCTOR("Doctor", ChatColor.GRAY + "This blessing will heal nearby teammates+" + ChatColor.GRAY + "within a short radius while sneaking.", ChatColor.BLUE),
-        CHAMS("Chams", ChatColor.GRAY + "This blessing will outline enemies+" + ChatColor.GRAY + "within a short radius.",ChatColor.YELLOW),
-        JELLYLEGS("Jellylegs", ChatColor.GRAY + "This blessing will give you immunity+" + ChatColor.GRAY + "to fall damage.",ChatColor.AQUA),
-        FROG("Frog", ChatColor.GRAY + "This blessing will give you a jump boost.+" + ChatColor.GRAY + "Toggle by right clicking in your hand.",ChatColor.GREEN);
+        PYROMANIAC("Pyromaniac", ChatColor.GRAY + "This blessing will give you+" + ChatColor.GRAY + "immunity to fire & lava.", ChatColor.RED, Material.LAVA_BUCKET),
+        DOCTOR("Doctor", ChatColor.GRAY + "This blessing will heal nearby teammates+" + ChatColor.GRAY + "within a short radius while sneaking.", ChatColor.BLUE, Material.DIAMOND),
+        CHAMS("Chams", ChatColor.GRAY + "This blessing will outline enemies+" + ChatColor.GRAY + "within a short radius.", ChatColor.YELLOW, Material.GLOWSTONE),
+        JELLYLEGS("Jellylegs", ChatColor.GRAY + "This blessing will give you immunity+" + ChatColor.GRAY + "to fall damage.", ChatColor.AQUA, Material.EMERALD),
+        FROG("Frog", ChatColor.GRAY + "This blessing will give you a jump boost.+" + ChatColor.GRAY + "Toggle by right clicking in your hand.", ChatColor.GREEN, Material.FEATHER);
 
         public String name;
         public ChatColor color;
         public ItemStack item;
 
-        Blessing(String name, String lore, ChatColor color) {
+        Blessing(String name, String lore, ChatColor color, Material specialMaterial) {
             this.name = name;
             this.color = color;
             this.item = createItem(color + name, lore);
+
+            NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("MiniWar"), "blessing_" + this.name.toLowerCase());
+            ShapedRecipe blessingRecipe = new ShapedRecipe(key, this.item);
+            blessingRecipe.shape("PPP", "PSP", "PPP");
+            blessingRecipe.setIngredient('S', specialMaterial);
+            blessingRecipe.setIngredient('P', Material.PAPER);
+            Bukkit.getServer().addRecipe(blessingRecipe);
         }
 
         public String getName() {
@@ -110,7 +118,7 @@ public class Blessings implements Listener {
                         for (Entity entity : nearbyEntities) {
                             if (entity instanceof Player) {
                                 if (Main.war.getPlayerTeam((Player) entity) == Main.war.getPlayerTeam(player) && ((Player) entity).getGameMode() == GameMode.SURVIVAL) {
-                                    ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 30, 0, false, true));
+                                    ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 30, 1, false, true));
                                 }
                             }
                         }
