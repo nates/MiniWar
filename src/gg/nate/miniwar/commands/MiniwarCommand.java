@@ -153,4 +153,8 @@ public class MiniwarCommand implements CommandExecutor {
 
         return false;
     }
+//    @Override
+//    public boolean onRecipeCommand(CommandSender sender, Command cmd, String label, String[] args) {
+//
+//    }
 }

@@ -25,7 +25,7 @@ public class Blessings implements Listener {
     public enum Blessing {
         PYROMANIAC("Pyromaniac", ChatColor.GRAY + "This blessing will give you+" + ChatColor.GRAY + "immunity to fire & lava.", ChatColor.RED, Material.LAVA_BUCKET),
         DOCTOR("Doctor", ChatColor.GRAY + "This blessing will heal nearby teammates+" + ChatColor.GRAY + "within a short radius while sneaking.", ChatColor.BLUE, Material.DIAMOND),
-        CHAMS("Chams", ChatColor.GRAY + "This blessing will outline enemies+" + ChatColor.GRAY + "within a short radius.", ChatColor.YELLOW, Material.GLOWSTONE),
+        CHAMS("Chams", ChatColor.GRAY + "This blessing will outline enemies+" + ChatColor.GRAY + "within a short radius.", ChatColor.YELLOW, Material.ENDER_PEARL),
         JELLYLEGS("Jellylegs", ChatColor.GRAY + "This blessing will give you immunity+" + ChatColor.GRAY + "to fall damage.", ChatColor.AQUA, Material.EMERALD),
         FROG("Frog", ChatColor.GRAY + "This blessing will give you a jump boost.+" + ChatColor.GRAY + "Toggle by right clicking in your hand.", ChatColor.GREEN, Material.FEATHER);
 
