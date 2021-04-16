@@ -56,7 +56,7 @@ public class Game {
         state = "OVER";
         Bukkit.getLogger().info("Game over.");
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendTitle(ChatColor.RED + "War Over", ChatColor.RED + "Winners: " +  String.join(", ", getTeam(winners).stream().map(Player::getDisplayName).collect(Collectors.toList())), 10, 60, 20);
+            p.sendTitle(ChatColor.RED + "War Over", ChatColor.RED + "Winners: " + String.join(", ", getTeam(winners).stream().map(Player::getDisplayName).collect(Collectors.toList())), 10, 60, 20);
             p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 10, 29);
             p.setGameMode(GameMode.SPECTATOR);
         }
@@ -124,7 +124,7 @@ public class Game {
             player.setHealth(20.0);
             player.setFoodLevel(20);
             player.setInvulnerable(false);
-            for(PotionEffect effect:player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
+            for (PotionEffect effect : player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
             giveStartingItems(player);
 
             if (Math.random() > 0.66) {
@@ -137,7 +137,7 @@ public class Game {
                         giveEffect(player);
                         break;
                     case 3:
-                            giveBlessing(player);
+                        giveBlessing(player);
                         break;
                 }
             }
@@ -237,19 +237,20 @@ public class Game {
         WorldCreator creator = new WorldCreator(worldName).environment(World.Environment.NORMAL);
         world = creator.createWorld();
 
-        for (World w : Bukkit.getWorlds()) if (w.getEnvironment().equals(World.Environment.NORMAL)) {
-            if (!w.getName().equals(worldName)) {
-                Bukkit.getServer().unloadWorld(w, true);
-                Utils.deleteWorld(w.getWorldFolder());
+        for (World w : Bukkit.getWorlds())
+            if (w.getEnvironment().equals(World.Environment.NORMAL)) {
+                if (!w.getName().equals(worldName)) {
+                    Bukkit.getServer().unloadWorld(w, true);
+                    Utils.deleteWorld(w.getWorldFolder());
+                }
             }
-        }
 
         Bukkit.getLogger().info("Created new world: " + worldName);
 
         Bukkit.getServer().setWhitelist(false);
     }
 
-    public void giveStartingItems(Player player){
+    public void giveStartingItems(Player player) {
         player.getInventory().addItem(new ItemStack(Material.STONE_SWORD, 1), new ItemStack(Material.STONE_PICKAXE, 1), new ItemStack(Material.STONE_SHOVEL, 1), new ItemStack(Material.STONE_AXE, 1), new ItemStack(Material.TORCH, 16), new ItemStack(Material.COBBLESTONE, 64), new ItemStack(Material.COOKED_BEEF, 16));
     }
 

@@ -117,7 +117,8 @@ public class Blessings implements Listener {
                         for (Entity entity : nearbyEntities) {
                             if (entity instanceof Player) {
                                 if (Main.war.getPlayerTeam((Player) entity) == Main.war.getPlayerTeam(player) && ((Player) entity).getGameMode() == GameMode.SURVIVAL) {
-                                    ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 30, 1, false, true));
+                                    ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 30, 1, false, false));
+                                    player.getWorld().spawnParticle(Particle.HEART, player.getLocation().add(0,1.5,0), 100);
                                 }
                             }
                         }
@@ -170,10 +171,11 @@ public class Blessings implements Listener {
         // Check for dropping frog blessing while jump effect active
         if (droppedItem.hasItemMeta() && droppedItem.getItemMeta().getDisplayName().equals(Blessing.FROG.getDisplayName())) {
             Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
-                if (player.hasPotionEffect(PotionEffectType.JUMP) && !hasBlessing(player, Blessing.FROG)) {
+                if (player.hasPotionEffect(PotionEffectType.JUMP) && !hasBlessing(player, Blessing.FROG)) { ;
                     player.removePotionEffect(PotionEffectType.JUMP);
                     player.sendMessage(Blessing.FROG.getDisplayName() + ChatColor.GRAY + " has been toggled off!");
                     player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, 8, 25);
+                    player.getWorld().spawnParticle(Particle.SLIME, player.getLocation(), 100);
                 }
             }, 5L);
         }
@@ -194,11 +196,13 @@ public class Blessings implements Listener {
                 player.removePotionEffect(PotionEffectType.JUMP);
                 player.sendMessage(Blessing.FROG.getDisplayName() + ChatColor.GRAY + " has been toggled off!");
                 player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, 8, 25);
+                player.getWorld().spawnParticle(Particle.SLIME, player.getLocation(), 100);
             } else {
                 PotionEffect jumpEffect = new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, false, false);
                 player.addPotionEffect(jumpEffect);
                 player.sendMessage(Blessing.FROG.getDisplayName() + ChatColor.GRAY + " has been toggled on!");
                 player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON, 8, 25);
+                player.getWorld().spawnParticle(Particle.SLIME, player.getLocation(), 100);
             }
         }
     }
