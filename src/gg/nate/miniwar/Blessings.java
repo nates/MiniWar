@@ -51,7 +51,7 @@ public class Blessings implements Listener {
         JELLYLEGS(
                 "Jellylegs",
                 ChatColor.GRAY + "This blessing will give you immunity+" + ChatColor.GRAY + "to fall damage.",
-                ChatColor.GREEN,
+                ChatColor.BLUE,
                 new String[]{"1  ", " 22", " 20"},
                 Material.WATER_BUCKET,
                 Material.EMERALD,
