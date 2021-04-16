@@ -171,7 +171,7 @@ public class Blessings implements Listener {
         // Check for dropping frog blessing while jump effect active
         if (droppedItem.hasItemMeta() && droppedItem.getItemMeta().getDisplayName().equals(Blessing.FROG.getDisplayName())) {
             Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
-                if (player.hasPotionEffect(PotionEffectType.JUMP) && !hasBlessing(player, Blessing.FROG)) { ;
+                if (player.hasPotionEffect(PotionEffectType.JUMP) && !hasBlessing(player, Blessing.FROG)) {
                     player.removePotionEffect(PotionEffectType.JUMP);
                     player.sendMessage(Blessing.FROG.getDisplayName() + ChatColor.GRAY + " has been toggled off!");
                     player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, 8, 25);
