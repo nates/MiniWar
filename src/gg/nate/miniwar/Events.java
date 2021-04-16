@@ -94,7 +94,7 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void portal(PlayerPortalEvent event){
+    public void onPlayerPortal(PlayerPortalEvent event){
         event.setCancelled(true);
     }
 
