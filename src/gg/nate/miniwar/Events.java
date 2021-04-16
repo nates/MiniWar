@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -42,7 +43,7 @@ public class Events implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player quitter = event.getPlayer();
-        if (Main.war.getPlayerTeam(quitter) == 0) return;
+        if (quitter.getGameMode() != GameMode.SURVIVAL || Main.war.getPlayerTeam(quitter) == 0 || Main.war.getLives(quitter) == 0) return;
         if (Main.war.getState().equals("GRACE") || Main.war.getState().equals("FIGHT")) {
             Main.war.setLives(quitter, 0);
             for (ItemStack stack : quitter.getInventory().getContents()) {
@@ -90,6 +91,11 @@ public class Events implements Listener {
                 Main.war.setLastDamaged((Player) defender, (Player) attacker);
             }
         }
+    }
+
+    @EventHandler
+    public void portal(PlayerPortalEvent event){
+        event.setCancelled(true);
     }
 
     @EventHandler
