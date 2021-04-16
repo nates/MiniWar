@@ -60,7 +60,7 @@ public class Blessings implements Listener {
         RABBIT(
                 "Rabbit",
                 ChatColor.GRAY + "This blessing will give you a jump boost.+" + ChatColor.GRAY + "Toggle by right clicking in your hand.",
-                ChatColor.DARK_GREEN,
+                ChatColor.LIGHT_PURPLE,
                 new String[]{"   ", " 11", " 10"},
                 Material.RABBIT_FOOT,
                 Material.PAPER
@@ -240,7 +240,6 @@ public class Blessings implements Listener {
                 player.sendMessage(Blessing.RABBIT.getDisplayName() + ChatColor.GRAY + " has been toggled on!");
                 player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON, 8, 25);
             }
-            player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 100);
         }
     }
 }

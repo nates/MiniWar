@@ -1,9 +1,6 @@
 package gg.nate.miniwar;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -143,6 +140,7 @@ public class Events implements Listener {
                     defender.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 200, 2));
                     defender.sendTitle(ChatColor.GREEN + "Second Chance", ChatColor.GREEN + "You have been given a second chance!", 10, 60, 20);
                     defender.playSound(defender.getLocation(), Sound.ITEM_TOTEM_USE, 10, 29);
+                    defender.getWorld().spawnParticle(Particle.TOTEM, defender.getLocation(), 100);
                 }
             }
         }
