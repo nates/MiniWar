@@ -2,7 +2,9 @@ package gg.nate.miniwar;
 
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Trident;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionEffect;
@@ -127,7 +129,7 @@ public class Game {
             for (PotionEffect effect : player.getActivePotionEffects()) player.removePotionEffect(effect.getType());
             giveStartingItems(player);
 
-            if (Math.random() > 0.66) {
+            if (Math.random() < 1) {
                 int random = (int) (Math.random() * 3) + 1;
                 switch (random) {
                     case 1:
@@ -276,24 +278,25 @@ public class Game {
         // Regular items
         items.add(new ItemStack(Material.ENDER_PEARL));
         items.add(new ItemStack(Material.GOLDEN_APPLE));
-        items.add(new ItemStack(Material.LEATHER_CHESTPLATE));
+        items.add(new ItemStack(Material.ELYTRA));
 
         // Enchanted items
-        ItemStack efficiencyPick = new ItemStack(Material.STONE_PICKAXE);
-        efficiencyPick.addEnchantment(Enchantment.DIG_SPEED, 1);
-        items.add(efficiencyPick);
+        ItemStack efficiencyIronPick = new ItemStack(Material.IRON_PICKAXE);
+        efficiencyIronPick.addEnchantment(Enchantment.DIG_SPEED, 1);
+        items.add(efficiencyIronPick);
 
-        ItemStack unbreakingBoots = new ItemStack(Material.IRON_BOOTS);
-        unbreakingBoots.addEnchantment(Enchantment.DURABILITY, 1);
-        items.add(unbreakingBoots);
+        ItemStack protBoots = new ItemStack(Material.IRON_BOOTS);
+        protBoots.addEnchantment(Enchantment.DURABILITY, 1);
+        items.add(protBoots);
 
         ItemStack protHelm = new ItemStack(Material.CHAINMAIL_HELMET);
-        protHelm.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        protHelm.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
         items.add(protHelm);
 
-        ItemStack unbreakingLeggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
-        unbreakingLeggings.addEnchantment(Enchantment.DURABILITY, 1);
-        items.add(unbreakingLeggings);
+        ItemStack trident = new ItemStack(Material.TRIDENT);
+        trident.addEnchantment(Enchantment.LOYALTY, 3);
+        trident.addEnchantment(Enchantment.CHANNELING, 1);
+        items.add(trident);
 
         Random rand = new Random();
         player.getInventory().addItem(items.get(rand.nextInt(items.size())));
