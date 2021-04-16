@@ -137,7 +137,7 @@ public class Game {
                         giveEffect(player);
                         break;
                     case 3:
-                        giveBlessing(player);
+                            giveBlessing(player);
                         break;
                 }
             }
@@ -148,7 +148,7 @@ public class Game {
         firstWarningTask = Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
             // Teleport all players
             for (Player player : getAllPlayers()) {
-                player.sendTitle(ChatColor.RED + "Warning", ChatColor.YELLOW + "The war will start in 5 minutes.", 10, 60, 20);
+                player.sendTitle(ChatColor.YELLOW + "Warning", ChatColor.YELLOW + "The war will start in 5 minutes.", 10, 60, 20);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 29);
             }
         }, 20L * 600);
