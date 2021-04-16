@@ -23,26 +23,65 @@ import java.util.Random;
 
 public class Blessings implements Listener {
     public enum Blessing {
-        PYROMANIAC("Pyromaniac", ChatColor.GRAY + "This blessing will give you+" + ChatColor.GRAY + "immunity to fire & lava.", ChatColor.RED, Material.LAVA_BUCKET),
-        DOCTOR("Doctor", ChatColor.GRAY + "This blessing will heal nearby teammates+" + ChatColor.GRAY + "within a short radius while sneaking.", ChatColor.BLUE, Material.DIAMOND),
-        CHAMS("Chams", ChatColor.GRAY + "This blessing will outline enemies+" + ChatColor.GRAY + "within a short radius.", ChatColor.YELLOW, Material.ENDER_PEARL),
-        JELLYLEGS("Jellylegs", ChatColor.GRAY + "This blessing will give you immunity+" + ChatColor.GRAY + "to fall damage.", ChatColor.AQUA, Material.EMERALD),
-        FROG("Frog", ChatColor.GRAY + "This blessing will give you a jump boost.+" + ChatColor.GRAY + "Toggle by right clicking in your hand.", ChatColor.GREEN, Material.FEATHER);
+        PYROMANIAC(
+                "Pyromaniac",
+                ChatColor.GRAY + "This blessing will give you+" + ChatColor.GRAY + "immunity to fire & lava.",
+                ChatColor.RED,
+                new String[]{"1  ", " 22", " 20"},
+                Material.LAVA_BUCKET,
+                Material.FLINT_AND_STEEL,
+                Material.PAPER
+        ),
+        DOCTOR(
+                "Doctor",
+                ChatColor.BLUE + "This blessing will heal nearby teammates+" + ChatColor.GRAY + "within a short radius while sneaking.",
+                ChatColor.YELLOW,
+                new String[]{"   ", " 11", " 10"},
+                Material.GOLDEN_APPLE,
+                Material.PAPER
+        ),
+        CHAMS(
+                "Chams",
+                ChatColor.GRAY + "This blessing will outline enemies+" + ChatColor.GRAY + "within a short radius.",
+                ChatColor.DARK_GREEN,
+                new String[]{"   ", " 11", " 10"},
+                Material.ENDER_PEARL,
+                Material.PAPER
+        ),
+        JELLYLEGS(
+                "Jellylegs",
+                ChatColor.GRAY + "This blessing will give you immunity+" + ChatColor.GRAY + "to fall damage.",
+                ChatColor.GREEN,
+                new String[]{"1  ", " 22", " 20"},
+                Material.WATER_BUCKET,
+                Material.EMERALD,
+                Material.PAPER
+        ),
+        RABBIT(
+                "Rabbit",
+                ChatColor.GRAY + "This blessing will give you a jump boost.+" + ChatColor.GRAY + "Toggle by right clicking in your hand.",
+                ChatColor.DARK_GREEN,
+                new String[]{"   ", " 11", " 10"},
+                Material.RABBIT_FOOT,
+                Material.PAPER
+        );
 
         public String name;
         public ChatColor color;
         public ItemStack item;
 
-        Blessing(String name, String lore, ChatColor color, Material specialMaterial) {
+        Blessing(String name, String lore, ChatColor color, String[] shape, Material... materials) {
             this.name = name;
             this.color = color;
             this.item = createItem(color + name, lore);
 
             NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("MiniWar"), "blessing_" + this.name.toLowerCase());
             ShapedRecipe blessingRecipe = new ShapedRecipe(key, this.item);
-            blessingRecipe.shape("PPP", "PSP", "PPP");
-            blessingRecipe.setIngredient('S', specialMaterial);
-            blessingRecipe.setIngredient('P', Material.PAPER);
+            blessingRecipe.shape(shape);
+            for (int i = 0; i < materials.length; i++) {
+                blessingRecipe.setIngredient((char) (i + '0'), materials[i]);
+            }
+
             Bukkit.getServer().addRecipe(blessingRecipe);
         }
 
@@ -168,14 +207,13 @@ public class Blessings implements Listener {
 
         if (!checkPlayer(player)) return;
 
-        // Check for dropping frog blessing while jump effect active
-        if (droppedItem.hasItemMeta() && droppedItem.getItemMeta().getDisplayName().equals(Blessing.FROG.getDisplayName())) {
+        // Check for dropping rabbit blessing while jump effect active
+        if (droppedItem.hasItemMeta() && droppedItem.getItemMeta().getDisplayName().equals(Blessing.RABBIT.getDisplayName())) {
             Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("MiniWar"), () -> {
-                if (player.hasPotionEffect(PotionEffectType.JUMP) && !hasBlessing(player, Blessing.FROG)) {
+                if (player.hasPotionEffect(PotionEffectType.JUMP) && !hasBlessing(player, Blessing.RABBIT)) {
                     player.removePotionEffect(PotionEffectType.JUMP);
-                    player.sendMessage(Blessing.FROG.getDisplayName() + ChatColor.GRAY + " has been toggled off!");
+                    player.sendMessage(Blessing.RABBIT.getDisplayName() + ChatColor.GRAY + " has been toggled off!");
                     player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, 8, 25);
-                    player.getWorld().spawnParticle(Particle.SLIME, player.getLocation(), 100);
                 }
             }, 5L);
         }
@@ -190,20 +228,19 @@ public class Blessings implements Listener {
 
         if (!checkPlayer(player)) return;
 
-        // Frog blessing
-        if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(Blessing.FROG.getDisplayName())) {
+        // Rabbit blessing
+        if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(Blessing.RABBIT.getDisplayName())) {
             if (player.hasPotionEffect(PotionEffectType.JUMP)) {
                 player.removePotionEffect(PotionEffectType.JUMP);
-                player.sendMessage(Blessing.FROG.getDisplayName() + ChatColor.GRAY + " has been toggled off!");
+                player.sendMessage(Blessing.RABBIT.getDisplayName() + ChatColor.GRAY + " has been toggled off!");
                 player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, 8, 25);
-                player.getWorld().spawnParticle(Particle.SLIME, player.getLocation(), 100);
             } else {
                 PotionEffect jumpEffect = new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, false, false);
                 player.addPotionEffect(jumpEffect);
-                player.sendMessage(Blessing.FROG.getDisplayName() + ChatColor.GRAY + " has been toggled on!");
+                player.sendMessage(Blessing.RABBIT.getDisplayName() + ChatColor.GRAY + " has been toggled on!");
                 player.playSound(player.getLocation(), Sound.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON, 8, 25);
-                player.getWorld().spawnParticle(Particle.SLIME, player.getLocation(), 100);
             }
+            player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 100);
         }
     }
 }
