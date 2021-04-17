@@ -25,7 +25,7 @@ public class Blessings implements Listener {
     public enum Blessing {
         PYROMANIAC(
                 "Pyromaniac",
-                ChatColor.GRAY + "This blessing will give you+" + ChatColor.GRAY + "immunity to fire & lava.",
+                ChatColor.GRAY + "This blessing will give you immunity+" + ChatColor.GRAY + "to fire & lava.",
                 ChatColor.RED,
                 new String[]{"1  ", " 22", " 20"},
                 Material.LAVA_BUCKET,
@@ -34,10 +34,11 @@ public class Blessings implements Listener {
         ),
         DOCTOR(
                 "Doctor",
-                ChatColor.GRAY + "This blessing will heal nearby teammates+" + ChatColor.GRAY + "within a short radius while sneaking.",
+                ChatColor.GRAY + "This blessing will heal nearby teammates+" + ChatColor.GRAY + "within a short radius+" + ChatColor.GRAY + "while sneaking.",
                 ChatColor.YELLOW,
-                new String[]{"   ", " 11", " 10"},
+                new String[]{"1  ", " 22", " 20"},
                 Material.GOLDEN_APPLE,
+                Material.DIAMOND,
                 Material.PAPER
         ),
         CHAMS(
@@ -62,7 +63,7 @@ public class Blessings implements Listener {
                 ChatColor.GRAY + "This blessing will give you a jump boost.+" + ChatColor.GRAY + "Toggle by right clicking in your hand.",
                 ChatColor.LIGHT_PURPLE,
                 new String[]{"   ", " 11", " 10"},
-                Material.RABBIT_FOOT,
+                Material.RABBIT_HIDE,
                 Material.PAPER
         );
 
