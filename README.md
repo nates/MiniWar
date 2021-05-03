@@ -3,8 +3,8 @@ A war game that can last up to 30 minutes in Minecraft 1.16.5.
 
 # Commands
 - Teams
-  - /miniwar teams add <player> [1 | 2 | 3 | 4]
-  - /miniwar teams remove <player>
+  - /miniwar teams add \<player\> [1 | 2 | 3 | 4]
+  - /miniwar teams remove \<player\>
   - /miniwar teams shuffle
   - /miniwar teams list
 - Other
