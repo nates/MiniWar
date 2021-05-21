@@ -1,7 +1,7 @@
-# MiniWar
-A war game that can last up to 30 minutes in Minecraft 1.16.5.
+# ⚔️ MiniWar
+A Minecraft team wars plugin.
 
-# Commands
+# 📚 Commands
 - Teams
   - /miniwar teams add \<player\> [1 | 2 | 3 | 4]
   - /miniwar teams remove \<player\>
@@ -11,7 +11,7 @@ A war game that can last up to 30 minutes in Minecraft 1.16.5.
   - /miniwar start
   - /miniwar stop
 
-# Blessings
+# 📜 Blessings
 Blessings will give you extra abilities to help yourself and maybe teammates. 
 ### Recipes
 ![Pyromaniac Blessing](https://cdn.discordapp.com/attachments/832707026441863189/832832213468315688/oEDqUAe.png)
@@ -20,5 +20,5 @@ Blessings will give you extra abilities to help yourself and maybe teammates.
 ![Doctor Blessing](https://cdn.discordapp.com/attachments/832707026441863189/832832262138626048/AFRCK8F.png)
 ![Jellylegs Blessing](https://cdn.discordapp.com/attachments/832707026441863189/832832281353781318/ElvZ2Ke.png)
 
-# Warning
-Backup your worlds before using this plugin, it will delete them. This plugin will most likely conflict with other plugins, so use this plugin alone.
+# ⚠️ Warning
+Only tested with Spigot 1.16.5! Backup your worlds before using this plugin, it will delete them. This plugin will most likely conflict with other plugins, so use this plugin alone.
