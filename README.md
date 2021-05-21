@@ -12,7 +12,6 @@ A Minecraft team wars plugin.
   - /miniwar stop
 
 # 📚 Blessings
-Blessings will give you extra abilities to help yourself and maybe teammates. 
 ![Pyromaniac Blessing](https://cdn.discordapp.com/attachments/832707026441863189/832832213468315688/oEDqUAe.png)
 ![Rabbit Blessing](https://cdn.discordapp.com/attachments/832707026441863189/832832230774013972/0I09C38.png)
 ![Chams Blessing](https://cdn.discordapp.com/attachments/832707026441863189/832832245727100928/MQMK44a.png)
